@@ -19,9 +19,6 @@ enum Protocol { http, https }
 
 enum Method { get, post, put, delete }
 
-// ignore: constant_identifier_names
-enum TypeBody { raw, formData, x_www_form_urlencoded }
-
 abstract class Endpoint {
   // si se require cambiar la url del api que se asigna en las variables de entorno
   String setApiUrl = '';
@@ -29,8 +26,6 @@ abstract class Endpoint {
   String get path;
 
   Method get method;
-  // se define siguiendo las opciones de postman para el body
-  TypeBody typeBody = TypeBody.raw;
 
   Map<String, dynamic> queryParameters = {};
 
@@ -69,16 +64,19 @@ class ImagesModelEndpoint {
 }
 
 abstract class ApiSdkRepository {
-  Future<Map<String, dynamic>> request(
+  Future<Map<String, dynamic>> raw(
       {String? setApiUrl, required Endpoint endpoint});
-  //TODO: agregar los tipos de petición separados por tipo de body
+  Future<Map<String, dynamic>> formData(
+      {String? setApiUrl, required Endpoint endpoint});
+  Future<Map<String, dynamic>> xWwwformurlencoded(
+      {String? setApiUrl, required Endpoint endpoint});
 }
 
 class ApiSdk implements ApiSdkRepository {
   final _logger = Logger();
 
   @override
-  Future<Map<String, dynamic>> request(
+  Future<Map<String, dynamic>> raw(
       {required Endpoint endpoint, String? setApiUrl}) async {
     _logger.d('Request endpoint: ${endpoint.body}');
     Uri url;
@@ -91,27 +89,20 @@ class ApiSdk implements ApiSdkRepository {
     }
 
     Map<String, String> headers = {
-      // ...Environment.network.headers,
+      HttpHeaders.acceptHeader: '*/*',
+      HttpHeaders.contentTypeHeader: 'application/json',
     };
     headers.addAll(endpoint.headers);
-    //agregamos lenguaje a los headers
-    // headers.addAll({'accept-language': LocalStorage.lenguage});
 
-    if (endpoint.typeBody == TypeBody.formData) {
-      return _formData(endpoint: endpoint, headers: headers);
-    } else if (endpoint.typeBody == TypeBody.x_www_form_urlencoded) {
-      return _xWwwformurlencoded(endpoint: endpoint, headers: headers);
-    } else {
-      switch (endpoint.method) {
-        case Method.get:
-          return _get(url, headers).then(_handleResponse);
-        case Method.post:
-          return _post(url, headers, endpoint.body).then(_handleResponse);
-        case Method.put:
-          return _put(url, headers, endpoint.body).then(_handleResponse);
-        case Method.delete:
-          return _delete(url, headers, endpoint.body).then(_handleResponse);
-      }
+    switch (endpoint.method) {
+      case Method.get:
+        return _get(url, headers).then(_handleResponse);
+      case Method.post:
+        return _post(url, headers, endpoint.body).then(_handleResponse);
+      case Method.put:
+        return _put(url, headers, endpoint.body).then(_handleResponse);
+      case Method.delete:
+        return _delete(url, headers, endpoint.body).then(_handleResponse);
     }
   }
 
@@ -173,17 +164,22 @@ class ApiSdk implements ApiSdkRepository {
     return map;
   }
 
-  Future<Map<String, dynamic>> _formData(
-      {required Endpoint endpoint,
-      required Map<String, String> headers}) async {
+  @override
+  Future<Map<String, dynamic>> formData(
+      {String? setApiUrl, required Endpoint endpoint}) async {
     try {
       Uri url = _defineUrl(endpoint: endpoint);
       var request = http.MultipartRequest(
           endpoint.method.name.toString().toUpperCase(), url);
+      // headers from request form-data
+      Map<String, String> headers = {
+        HttpHeaders.contentTypeHeader: 'multipart/form-data',
+        HttpHeaders.acceptHeader: '*/*',
+      };
+
+      request.headers.addAll(headers);
       request.headers.addAll(endpoint.headers);
-      //agregamos lenguaje a los headers
-      // request.headers.addAll({'lang': LocalStorage.lenguage});
-      // cast map<String, dynamic> to map<String, String>
+
       Map<String, String> body = {};
       endpoint.body.forEach((key, value) {
         body.addAll({key: value.toString()});
@@ -206,7 +202,7 @@ class ApiSdk implements ApiSdkRepository {
         }
       }
       _logger.d(
-          'Type: form-data - ${endpoint.method.name}() with url ($url) - headers (${request.headers}) - typeBody ${endpoint.typeBody.name} - body (${request.fields}) - files ${endpoint.files.map((e) => e.toJson())}');
+          'Type: form-data - ${endpoint.method.name}() with url ($url) - headers (${request.headers}) - body (${request.fields}) - files ${endpoint.files.map((e) => e.toJson())}');
 
       http.StreamedResponse response = await request.send();
 
@@ -220,17 +216,20 @@ class ApiSdk implements ApiSdkRepository {
     }
   }
 
-  Future<Map<String, dynamic>> _xWwwformurlencoded(
-      {required Endpoint endpoint,
-      required Map<String, String> headers}) async {
+  @override
+  Future<Map<String, dynamic>> xWwwformurlencoded(
+      {String? setApiUrl, required Endpoint endpoint}) async {
     try {
       Uri url = _defineUrl(endpoint: endpoint);
 
       var request =
           http.Request(endpoint.method.name.toString().toUpperCase(), url);
-
+      // headers from request form-data
+      Map<String, String> headers = {
+        HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
+        HttpHeaders.acceptHeader: '*/*',
+      };
       request.headers.addAll(headers);
-      // request.headers.addAll({'lang': LocalStorage.lenguage});
       Map<String, String> body = {};
       endpoint.body.forEach((key, value) {
         body.addAll({key: value.toString()});
@@ -239,7 +238,7 @@ class ApiSdk implements ApiSdkRepository {
       request.bodyFields = body;
 
       _logger.d(
-          'Type: x-www-form-urlencoded - ${endpoint.method.name}() with url ($url) - headers (${request.headers}) - typeBody ${endpoint.typeBody.name} - body (${request.bodyFields})');
+          'Type: x-www-form-urlencoded - ${endpoint.method.name}() with url ($url) - headers (${request.headers}) - body (${request.bodyFields})');
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {

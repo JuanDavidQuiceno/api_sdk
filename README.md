@@ -11,13 +11,6 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
 ## Getting started
 
 - En el archivo api-key.json.tpl dupliquelo y elimine .tpl
@@ -44,20 +37,20 @@ TODO: List what your package can do. Maybe include images, gifs, or videos.
   "version": "0.2.0",
   "configurations": [
       {
-          "name": "kit-touch-app",
+          "name": "app",
           "request": "launch",
           "type": "dart",
           "args": ["--dart-define-from-file","api-key.json"]
       },
       {
-          "name": "kit-touch-app (profile mode)",
+          "name": "app (profile mode)",
           "request": "launch",
           "type": "dart",
           "flutterMode": "profile",
           "args": ["--dart-define-from-file","api-key.json"]
       },
       {
-          "name": "kit-touch-app (release mode)",
+          "name": "app (release mode)",
           "request": "launch",
           "type": "dart",
           "flutterMode": "release",
@@ -107,11 +100,56 @@ o
 
 > Nota 4: `DEBUG`: de forma predeterminada será `true`, lo que hará que las solicitudes siempre se realicen con el protocolo `https`. También puedes conectarte al dominio de producción cambiando `DEBUG` a "false" y proporcionando la variable de entorno `API_URL_PRODUCTION`, siguiendo las recomendaciones de prefijo.
 
+#
+
+#
+
+## Comando para los diferentes tipos de compilaciones:
+
+> Antes de compilar verifique que el modo de `DEBUG` sea el deseado.
+> Antes de hacer las diferentes compilaciones se recomienda ejecutar el comando
+
+```sh
+flutter clean
+flutter pub get
 ```
 
-<!-- ## Additional information
+#
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more. -->
+Compilación modo release para apk o appbundle:
+
+```sh
+flutter build apk --split-per-abi --dart-define-from-file=api-key.json
+```
+
+```sh
+flutter build appbundle --dart-define-from-file=api-key.json
+```
+
+#
+
+Compilación para ios:
+
+```sh
+flutter build ipa --dart-define-from-file=api-key.json
+```
+
+ejectutando el siguiente comando se obtendra el archivo .ipa para subir a la appstore
+
+```sh
+open ./build/ios/archive/Runner.xcarchive
+```
+
+#
+
+Compilación para web:
+
+```sh
+flutter build web --dart-define-from-file=api-key.json
+```
+
+o en caso de que se requiera un base-href
+
+```sh
+flutter build web --base-href "/" --dart-define-from-file=api-key.json
 ```
