@@ -4,7 +4,7 @@ version: 0.0.2
 homepage: https://github.com/JuanDavidQuiceno/api_sdk
 
 environment:
-  sdk: ">=3.1.5 <4.0.0"
+  sdk: ">=3.1.3 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
