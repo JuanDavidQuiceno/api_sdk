@@ -92,7 +92,8 @@ class CountryEndpoint extends EndpointConfig {
 
   /// The setter base url of the endpoint
   ///
-  /// set the [baseUrl] of the endpoint if you want to change the default [baseUrl] of the environment
+  /// set the [baseUrl] of the endpoint if you want to change the default
+  /// [baseUrl] of the environment
   @override
   String get setBaseUrl => 'https://restcountries.com';
 
@@ -104,7 +105,8 @@ class CountryEndpoint extends EndpointConfig {
 
   /// The path of the endpoint
   ///
-  /// The default path is empty, if you want to add a path you can do it like this '/v3.1/alpha/col' or 'v3.1/alpha/col'
+  /// The default path is empty, if you want to add a path you can do it
+  /// like this '/v3.1/alpha/col' or 'v3.1/alpha/col'
   @override
   String get path => 'v3.1/alpha/col';
 
@@ -128,7 +130,8 @@ class CountryEndpoint extends EndpointConfig {
 
   /// The body type of the endpoint
   ///
-  /// [BodyType.raw], [BodyType.formData], [BodyType.xWwwformurlencoded], the default is [BodyType.raw]
+  /// [BodyType.raw], [BodyType.formData], [BodyType.xWwwformurlencoded],
+  /// the default is [BodyType.raw]
   @override
   BodyType get bodyType => BodyType.raw;
 
@@ -143,7 +146,9 @@ class CountryEndpoint extends EndpointConfig {
 
   /// Files to upload of the endpoint
   ///
-  /// The default is empty, if you want to add a file you can do it like this: [key] is default 'files', [path] is the path of the file, [url] is the url of the file, the default key is 'files'
+  /// The default is empty, if you want to add a file you can do it like this:
+  /// [key] is default 'files', [path] is the path of the file, [url] is the
+  /// url of the file, the default key is 'files'
   @override
   List<ImagesModelEndpoint> get files => [
         /// example of a file
