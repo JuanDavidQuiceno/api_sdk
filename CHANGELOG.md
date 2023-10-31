@@ -1,3 +1,9 @@
+## 0.0.4
+
+- Example update
+- fix response strucuring for body types
+- add new documentation
+
 ## 0.0.3
 
 - add example
