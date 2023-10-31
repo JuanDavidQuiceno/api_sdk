@@ -1,8 +1,8 @@
 ## 0.0.4
 
 - Example update
-- fix response strucuring for body types
-- add new documentation
+- Fix response structuring for body types
+- New documentation added
 
 ## 0.0.3
 
