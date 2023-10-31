@@ -17,7 +17,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -32,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('Flutter Example Call API'),
         ),
         body: Center(
@@ -43,9 +42,12 @@ class _MyAppState extends State<MyApp> {
                 const Text(
                   'You have pushed the button this many times:',
                 ),
-                Text(
-                  apiData,
-                  style: Theme.of(context).textTheme.bodySmall,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    apiData,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -56,17 +58,21 @@ class _MyAppState extends State<MyApp> {
                       apiData = 'Loading...';
                     });
                     await ApiSdk()
-                        .raw(
-                      endpoint: CountryEndpoint(),
-                    )
+                        .run(endpoint: CountryEndpoint())
                         .then((value) {
-                      if (value['statusCode'] == 200) {
+                      if (value.statusCode == 200) {
                         setState(() {
-                          apiData = value.toString();
+                          apiData = value.body.toString();
+                        });
+                      } else {
+                        setState(() {
+                          apiData = value.body.toString();
                         });
                       }
                     }).catchError((e) {
-                      apiData = 'Error';
+                      setState(() {
+                        apiData = e.toString();
+                      });
                     });
                   },
                   child: const Text('Call API'),
@@ -81,23 +87,30 @@ class _MyAppState extends State<MyApp> {
 }
 
 /// Example endpoint extending the [Endpoint] class
-class CountryEndpoint extends Endpoint {
+class CountryEndpoint extends EndpointConfig {
   CountryEndpoint();
 
-  /// set the [baseUrl] of the endpoint
+  /// The setter base url of the endpoint
+  ///
+  /// set the [baseUrl] of the endpoint if you want to change the default [baseUrl] of the environment
   @override
-  String get setApiUrl => 'https://restcountries.com';
+  String get setBaseUrl => 'https://restcountries.com';
 
   /// The method of the endpoint
-  /// acepts [Method.get], [Method.post], [Method.put], [Method.delete]
+  ///
+  /// Accepts [Method.get], [Method.post], [Method.put], [Method.delete]
   @override
   Method get method => Method.get;
 
   /// The path of the endpoint
+  ///
+  /// The default path is empty, if you want to add a path you can do it like this '/v3.1/alpha/col' or 'v3.1/alpha/col'
   @override
   String get path => 'v3.1/alpha/col';
 
   /// The query parameters of the endpoint
+  ///
+  /// The default query parameters is empty
   @override
   Map<String, dynamic> get queryParameters => {
         /// example of a query parameter
@@ -105,28 +118,35 @@ class CountryEndpoint extends Endpoint {
       };
 
   /// The headers of the endpoint
+  ///
+  /// The default headers depends of the [bodyType] or the headers you set
   @override
   Map<String, String> get headers => {
         /// example of a header
         /// HttpHeaders.authorizationHeader: 'token'
       };
 
+  /// The body type of the endpoint
+  ///
+  /// [BodyType.raw], [BodyType.formData], [BodyType.xWwwformurlencoded], the default is [BodyType.raw]
+  @override
+  BodyType get bodyType => BodyType.raw;
+
   /// The body of the endpoint
+  ///
+  /// The default body is empty
   @override
   Map<String, dynamic> get body => {
         /// example of a body
         /// 'key': 'value'
       };
 
-  /// files to upload
-  /// [key] is default 'files'
-  /// [path] is the path of the file
-  /// [url] is the url of the file
+  /// Files to upload of the endpoint
+  ///
+  /// The default is empty, if you want to add a file you can do it like this: [key] is default 'files', [path] is the path of the file, [url] is the url of the file, the default key is 'files'
   @override
   List<ImagesModelEndpoint> get files => [
         /// example of a file
-        /// ImagesModelEndpoint(
-        ///  key: 'files',
-        /// path: 'path',
+        /// ImagesModelEndpoint( key: 'files', path: 'path' )
       ];
 }
