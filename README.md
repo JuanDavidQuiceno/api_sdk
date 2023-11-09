@@ -26,8 +26,6 @@ and the Flutter guide for
 },
 ```
 
-#
-
 ## Metodo de compilación
 
 - Si van a usar Vscode editar el archivo _.vscode/launch.json_ en caso de no existir crearlo con el siguiente contenido:
@@ -62,13 +60,7 @@ and the Flutter guide for
 
 - Luego podran compilar normalmente con F5 en modo debug, profile o release.
 
-#
-
-#
-
 ## Usage
-
-#
 
 ```bash
 # Si se definen las url con el prefijo https o http la variable de entorno PROTOCOL no tendra relevancia.
@@ -98,12 +90,6 @@ o
 
 > Nota 3: `API_URL` y `API_URL_PRODUCTION`: Esta variable es para definir el dominio de conexión , si usas la url con el prefijo `https` o `http` este tendra relevancia por encima de la variable de entorno `PROTOCOL`, en caso de usar la url `example.com` se usara el protocolo definido en la variable de entorno `PROTOCOL`.
 
-> Nota 4: `DEBUG`: de forma predeterminada será `true`, lo que hará que las solicitudes siempre se realicen con el protocolo `https`. También puedes conectarte al dominio de producción cambiando `DEBUG` a "false" y proporcionando la variable de entorno `API_URL_PRODUCTION`, siguiendo las recomendaciones de prefijo.
-
-#
-
-#
-
 ## Comando para los diferentes tipos de compilaciones:
 
 > Antes de compilar verifique que el modo de `DEBUG` sea el deseado.
@@ -114,8 +100,6 @@ flutter clean
 flutter pub get
 ```
 
-#
-
 Compilación modo release para apk o appbundle:
 
 ```sh
@@ -125,8 +109,6 @@ flutter build apk --split-per-abi --dart-define-from-file=api-key.json
 ```sh
 flutter build appbundle --dart-define-from-file=api-key.json
 ```
-
-#
 
 Compilación para ios:
 
@@ -140,8 +122,6 @@ ejectutando el siguiente comando se obtendra el archivo .ipa para subir a la app
 open ./build/ios/archive/Runner.xcarchive
 ```
 
-#
-
 Compilación para web:
 
 ```sh
@@ -153,3 +133,17 @@ o en caso de que se requiera un base-href
 ```sh
 flutter build web --base-href "/" --dart-define-from-file=api-key.json
 ```
+
+## Contribution
+
+Of course the project is open source, and you can contribute to it [repository link](https://github.com/koukibadr/Elegant-Notification)
+
+- If you **found a bug**, open an issue.
+- If you **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
+
+## Contributors
+
+<a href="https://github.com/JuanDavidQuiceno/api_sdk/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=JuanDavidQuiceno/api_sdk" />
+</a>
