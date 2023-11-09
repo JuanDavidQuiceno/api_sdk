@@ -120,7 +120,7 @@ flutter clean
 flutter pub get
 ```
 
-Compilation in release mode for APK or app bundle:
+#### Compilation in release mode for APK or app bundle:
 
 ```sh
 flutter build apk --split-per-abi --dart-define-from-file=api-key.json
@@ -130,7 +130,7 @@ flutter build apk --split-per-abi --dart-define-from-file=api-key.json
 flutter build appbundle --dart-define-from-file=api-key.json
 ```
 
-Compilation for iOS:
+#### Compilation for iOS:
 
 ```sh
 flutter build ipa --dart-define-from-file=api-key.json
@@ -142,7 +142,7 @@ Running the following command will generate the .ipa file for uploading to the A
 open ./build/ios/archive/Runner.xcarchive
 ```
 
-Compilation for the web:
+#### Compilation for the web:
 
 ```sh
 flutter build web --dart-define-from-file=api-key.json
