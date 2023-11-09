@@ -147,8 +147,9 @@ class CountryEndpoint extends EndpointConfig {
   /// Files to upload of the endpoint
   ///
   /// The default is empty, if you want to add a file you can do it like this:
-  /// [key] is default 'files', [path] is the path of the file, [url] is the
-  /// url of the file, the default key is 'files'
+  /// [key] is default 'files',
+  /// [path] is the path of the file,
+  /// [url] is the url of the file, the default key is 'files'
   @override
   List<ImagesModelEndpoint> get files => [
         /// example of a file

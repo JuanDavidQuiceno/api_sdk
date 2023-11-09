@@ -1,7 +1,7 @@
 name: api_sdk
 description: This package is designed to standardize the different types of requests that we need, from simple requests to sending files
-version: 0.0.4
-homepage: https://github.com/JuanDavidQuiceno/api_sdk
+version: 0.0.5
+repository: https://github.com/JuanDavidQuiceno/api_sdk
 
 environment:
   sdk: ">=3.1.3 <4.0.0"

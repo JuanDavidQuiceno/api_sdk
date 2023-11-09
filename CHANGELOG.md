@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Update documentation
+
 ## 0.0.4
 
 - Example update
