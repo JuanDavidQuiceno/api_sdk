@@ -1,24 +1,28 @@
+## 0.0.6
+
+- Updated README.md
+
 ## 0.0.5
 
-- Update documentation
+- Updated documentation
 
 ## 0.0.4
 
-- Example update
-- Fix response structuring for body types
-- New documentation added
+- Updated example
+- Fixed response structuring for body types
+- Added new documentation
 
 ## 0.0.3
 
-- add example
+- Added an example
 
 ## 0.0.2
 
-- add support for `--dart-define-from-file` argument
-- dependencies update
-- add mode compile
-- add suppor request fromData and x-www-form-urlencoded
+- Added support for the `--dart-define-from-file` argument
+- Updated dependencies
+- Added compilation mode
+- Added support for requests with fromData and x-www-form-urlencoded
 
 ## 0.0.1
 
-- initial implementation of classes
+- Initial release

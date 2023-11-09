@@ -11,10 +11,30 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
+[![pub package](https://img.shields.io/pub/v/api_sdk.svg)](https://pub.dev/packages/api_sdk)
+
 ## Getting started
 
-- En el archivo api-key.json.tpl dupliquelo y elimine .tpl
-- Agregar las variables requeridas en el archivo api-key.json
+This package is used to make requests to an API. It is based on the [http](https://pub.dev/packages/http) package.
+Supports the following request types: `GET`, `POST`, `PUT`, `DELETE`.
+Types of request bodies supported: `JSON`, `x-www-form-urlencoded`, `fromData`.
+
+Supports platform compilation for:
+
+- [x] Android
+- [x] iOS
+- [x] Web
+- [x] Windows
+- [x] Linux
+
+#### Exception mode debug ios:
+
+The environment variables in debug mode do not run on emulators at the moment.
+
+## Using environment variables
+
+- In the api-key.json.tpl file, make a copy and remove the .tpl extension.
+- Add the required variables to the api-key.json file.
 
 ```bash
 # Ejemplo:
@@ -26,9 +46,9 @@ and the Flutter guide for
 },
 ```
 
-## Metodo de compilación
+## Compilation Method
 
-- Si van a usar Vscode editar el archivo _.vscode/launch.json_ en caso de no existir crearlo con el siguiente contenido:
+- If you are using Visual Studio Code, edit the _.vscode/launch.json_ file. If it does not exist, create it with the following content:
 
 ```bash
  {
@@ -58,12 +78,12 @@ and the Flutter guide for
   },
 ```
 
-- Luego podran compilar normalmente con F5 en modo debug, profile o release.
+- Afterward, you can compile normally with F5 in debug, profile, or release mode.
 
 ## Usage
 
 ```bash
-# Si se definen las url con el prefijo https o http la variable de entorno PROTOCOL no tendra relevancia.
+# If you define the URLs with the https or http prefix, the PROTOCOL environment variable will not be relevant.
 {
     "API_URL": "https://example.com",
     "API_URL_PRODUCTION": "https://example.com",
@@ -75,7 +95,7 @@ and the Flutter guide for
 o
 
 ```bash
-# Si se definen las url sin el prefijo la variable de entorno PROTOCOL tendra relevancia.
+# If you define the URLs without the prefix, the PROTOCOL environment variable will be relevant.
 {
     "API_URL": "localhost:4000"
     "API_URL_PRODUCTION": "localhost:4000"
@@ -84,23 +104,23 @@ o
 }
 ```
 
-> Note 1: `PROTOCOL`: Esta variable es para definir el protocolo de conexión, por defecto es `https`, pero si se desea cambiar a `http` se debe cambiar el valor a `http` y agregar la variable `API_URL` con el dominio de conexión.
+> Note 1: `PROTOCOL`: This variable is used to define the connection protocol. By default, it is `https`, but if you wish to change it to `http`, you should modify the value to `http` and add the `API_URL` variable with the connection domain.
 
-> Note 2: `DEBUG`: por defecto sera `true`, lo cual siempre hara las peticiones con protocolo `https`, Tambien se puede conectar al dominio de producción cambiando `DEBUG` a "false" y proporcionando la variable de entorno `API_URL_PRODUCTION`.
+> Note 2: `DEBUG`: By default, it is set to `true`, which will always make requests using the `https` protocol. You can also connect to the production domain by setting `DEBUG` to `false` and providing the `API_URL_PRODUCTION` environment variable.
 
-> Nota 3: `API_URL` y `API_URL_PRODUCTION`: Esta variable es para definir el dominio de conexión , si usas la url con el prefijo `https` o `http` este tendra relevancia por encima de la variable de entorno `PROTOCOL`, en caso de usar la url `example.com` se usara el protocolo definido en la variable de entorno `PROTOCOL`.
+> Note 3: `API_URL` and `API_URL_PRODUCTION`: These variables are used to define the connection domain. If you use a URL with the `https` or `http` prefix, these variables take precedence over the `PROTOCOL` environment variable. If you use the URL `example.com`, the protocol defined in the `PROTOCOL` environment variable will be used.
 
-## Comando para los diferentes tipos de compilaciones:
+## Commands for Different Compilation Types:
 
-> Antes de compilar verifique que el modo de `DEBUG` sea el deseado.
-> Antes de hacer las diferentes compilaciones se recomienda ejecutar el comando
+> Before compiling, make sure that the DEBUG mode is set as desired.
+> Before performing different compilations, it is recommended to run the following command:
 
 ```sh
 flutter clean
 flutter pub get
 ```
 
-Compilación modo release para apk o appbundle:
+Compilation in release mode for APK or app bundle:
 
 ```sh
 flutter build apk --split-per-abi --dart-define-from-file=api-key.json
@@ -110,25 +130,25 @@ flutter build apk --split-per-abi --dart-define-from-file=api-key.json
 flutter build appbundle --dart-define-from-file=api-key.json
 ```
 
-Compilación para ios:
+Compilation for iOS:
 
 ```sh
 flutter build ipa --dart-define-from-file=api-key.json
 ```
 
-ejectutando el siguiente comando se obtendra el archivo .ipa para subir a la appstore
+Running the following command will generate the .ipa file for uploading to the App Store:
 
 ```sh
 open ./build/ios/archive/Runner.xcarchive
 ```
 
-Compilación para web:
+Compilation for the web:
 
 ```sh
 flutter build web --dart-define-from-file=api-key.json
 ```
 
-o en caso de que se requiera un base-href
+Or, if a base-href is required:
 
 ```sh
 flutter build web --base-href "/" --dart-define-from-file=api-key.json
@@ -136,7 +156,7 @@ flutter build web --base-href "/" --dart-define-from-file=api-key.json
 
 ## Contribution
 
-Of course the project is open source, and you can contribute to it [repository link](https://github.com/koukibadr/Elegant-Notification)
+Of course the project is open source, and you can contribute to it [repository link](https://github.com/JuanDavidQuiceno/api_sdk).
 
 - If you **found a bug**, open an issue.
 - If you **have a feature request**, open an issue.
