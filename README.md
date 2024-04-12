@@ -27,10 +27,6 @@ Supports platform compilation for:
 - [x] Windows
 - [x] Linux
 
-#### Exception mode debug ios:
-
-The environment variables in debug mode do not run on emulators at the moment.
-
 ## Using environment variables
 
 - In the api-key.json.tpl file, make a copy and remove the .tpl extension.
