@@ -1,3 +1,7 @@
+## 0.0.7
+
+- fix response structuring for body types
+
 ## 0.0.6
 
 - Updated README.md

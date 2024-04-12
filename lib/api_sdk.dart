@@ -54,7 +54,7 @@ abstract class EndpointConfig {
 /// [ResponseApiSdk] is the response of the endpoint
 class ResponseApiSdk {
   /// The body of the response
-  Map<String, dynamic>? body;
+  dynamic body;
 
   /// the headers of the response
   Map<String, String>? headers;
@@ -94,11 +94,13 @@ class ImagesModelEndpoint {
   String path;
   String key;
   String? url;
+  MediaType? contentType;
 
   ImagesModelEndpoint({
     required this.path,
     required this.key,
     this.url,
+    this.contentType,
   });
 
   factory ImagesModelEndpoint.fromJson(Map<String, dynamic> json) =>
@@ -106,12 +108,16 @@ class ImagesModelEndpoint {
         path: json['path'] == null ? '' : json['path'].toString(),
         key: json['key'] == null ? 'files' : json['key'].toString(),
         url: json['url'],
+        contentType: json['contentType'] == null
+            ? null
+            : MediaType.parse(json['contentType'].toString()),
       );
 
   Map<String, dynamic> toJson() => {
         'path': path,
         'key': key,
         'url': url,
+        'contentType': contentType?.toString(),
       };
 }
 
@@ -177,13 +183,13 @@ class ApiSdk implements ApiSdkRepository {
       if (endpoint.files.isNotEmpty) {
         for (ImagesModelEndpoint element in endpoint.files) {
           /// verify
-          String type = element.path.split('.').last;
+
           request.files.add(
             MultipartFile.fromBytes(
               element.key,
               await File.fromUri(Uri.parse(element.path)).readAsBytes(),
               filename: element.path,
-              contentType: MediaType('image', type),
+              contentType: element.contentType,
             ),
           );
         }
@@ -267,7 +273,7 @@ class ApiSdk implements ApiSdkRepository {
       }
     } catch (e) {
       if (debug) _logger.e('APIRepository - Error send request $e ');
-      throw Exception('Error parse uri $e');
+      throw Exception('Error send request raw Error parse uri $e');
     }
   }
 
@@ -308,22 +314,19 @@ class ApiSdk implements ApiSdkRepository {
   ResponseApiSdk _handleResponse(Response response) {
     if (response.body.isEmpty) {
       return _responseMap(
-          statusCode: response.statusCode, headers: response.headers);
-    }
-    final decodedBody = json.decode(response.body);
-    // validar si el body es un map una lista o un string
-    if (decodedBody is Map<String, dynamic>) {
-      return _responseMap(
         statusCode: response.statusCode,
         headers: response.headers,
-        body: decodedBody,
+        body: {},
       );
     }
+
+    final decodedBody = json.decode(response.body);
+    // validar si el body es un map una lista o un string
 
     return _responseMap(
       statusCode: response.statusCode,
       headers: response.headers,
-      body: decodedBody.isNotEmpty ? {'data': decodedBody} : null,
+      body: decodedBody,
     );
   }
 
@@ -333,8 +336,7 @@ class ApiSdk implements ApiSdkRepository {
     int? statusCode = 500,
   }) {
     if (debug) {
-      _logger.d(
-          'Response - status code: $statusCode - hearder: $headers - body: $body');
+      _logger.d('Response - status code: $statusCode - body: $body');
     }
     if (body is Map<String, dynamic>) {
       return ResponseApiSdk(
@@ -364,12 +366,7 @@ class _FormatUrl {
         : Protocol.https;
 
     // definimos el url de las variables de entorno
-    String apiUrl = const String.fromEnvironment('DEBUG').isEmpty
-        ? const String.fromEnvironment('DEBUG').toString().toLowerCase() ==
-                'true'
-            ? const String.fromEnvironment('API_URL')
-            : const String.fromEnvironment('API_URL_PRODUCTION')
-        : const String.fromEnvironment('API_URL');
+    String apiUrl = const String.fromEnvironment('API_URL');
 
     //asignamos el path endpoint.path y eliminamos el primer / en caso de que lo tenga
     String path = endpoint.path.startsWith('/')
